@@ -1,26 +1,64 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --yellow: #E8F000;
+  --black: #111111;
+  --cream: #F2F0EB;
+  --white: #ffffff;
+  --muted: #666666;
+  --border: #111111;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --font-playfair: var(--font-playfair);
+  --font-grotesk: var(--font-space-grotesk);
+  --font-dancing: var(--font-dancing-script);
+  --font-inter: var(--font-inter);
+  
+  --color-yellow: var(--yellow);
+  --color-cream: var(--cream);
+  --color-dark: var(--black);
+  --color-muted: var(--muted);
+  --color-border-custom: var(--border);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--black);
+  border: 1px solid var(--cream);
 }
 
+::selection {
+  background: var(--yellow);
+  color: var(--black);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Dot grid background */
+.dot-grid {
+  background-image: radial-gradient(circle, #bbb 1px, transparent 1px);
+  background-size: 22px 22px;
+  background-color: #F2F0EB;
+}
+
+/* Base resets & typography bindings */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--cream);
+  color: var(--black);
+  font-family: var(--font-inter), sans-serif;
+  overflow-x: hidden;
+}
+
+/* Sharp borders utility */
+.brutalist-border {
+  border: 2px solid var(--black);
 }

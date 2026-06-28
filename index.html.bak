@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Roman Tesliuk — pixelwrld.co</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Sans:opsz,wght@9..40,300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ─────────────────────────────────────────────
+   BASE RESET & TOKENS
+───────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg: #f0ede8;
+  --text: #111;
+  --muted: #777;
+  --card-r: 22px;
+  --font-hand: 'Caveat', cursive;
+  --font-body: 'DM Sans', sans-serif;
+}
+html,body{height:100%;overflow-x:hidden}
+body{
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  cursor: none;
+  user-select: none;
+}
+
+/* ─────────────────────────────────────────────
+   CUSTOM CURSOR
+───────────────────────────────────────────── */
+#c-dot{
+  position:fixed; width:7px; height:7px;
+  background:#111; border-radius:50%;
+  pointer-events:none; z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform .08s ease, background .2s;
+}
+#c-ring{
+  position:fixed; width:34px; height:34px;
+  border:1.5px solid rgba(17,17,17,.28);
+  border-radius:50%;
+  pointer-events:none; z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:width .22s ease, height .22s ease,
+             border-color .22s ease, border-radius .22s ease;
+}
+body.cursor-hover #c-ring{
+  width:52px; height:52px;
+  border-color:rgba(17,17,17,.5);
+}
+body.cursor-click #c-dot{ transform:translate(-50%,-50%) scale(2.2); }
+
+/* ─────────────────────────────────────────────
+   HERO LAYOUT
+───────────────────────────────────────────── */
+.hero{
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding: 0 24px 60px;
+  position:relative;
+  overflow:hidden;
+}
+
+/* ─────────────────────────────────────────────
+   HEADLINE
+───────────────────────────────────────────── */
+.headline-wrap{
+  position:relative; z-index:10;
+  transition: transform .55s cubic-bezier(.22,.68,0,1.2),
+              opacity .45s ease,
+              filter .45s ease;
+}
+.headline-wrap.pushed{
+  transform: translateY(-30px);
+  opacity: .35;
+  filter: blur(2px);
+}
+.headline{
+  font-family: var(--font-hand);
+  font-size: clamp(2.6rem, 7.5vw, 5.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text);
+  letter-spacing: -.01em;
+}
+/* letter-by-letter reveal */
+.headline .char{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(18px);
+  animation: charIn .5s forwards;
+}
+
+/* ─────────────────────────────────────────────
+   CARDS ROW
+───────────────────────────────────────────── */
+.cards-row{
+  display:flex; gap:28px;
+  justify-content:center; align-items:flex-end;
+  margin-top:44px;
+  position:relative; z-index:20;
+}
+
+/* single card wrapper */
+.card-wrap{
+  display:flex; flex-direction:column;
+  align-items:center; gap:10px;
+  position:relative;
+  cursor:pointer;
+}
+
+/* ── APP ICON ── */
+.app-icon{
+  width:96px; height:96px;
+  border-radius: var(--card-r);
+  overflow:hidden;
+  box-shadow: 0 6px 22px rgba(0,0,0,.13);
+  position:relative; z-index:2;
+  transition:
+    transform .38s cubic-bezier(.34,1.56,.64,1),
+    box-shadow .3s ease,
+    filter .38s ease,
+    opacity .38s ease;
+  flex-shrink:0;
+}
+.app-icon img{width:100%;height:100%;object-fit:cover;display:block;}
+.app-icon-placeholder{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.6rem;
+}
+
+/* card label */
+.card-label{
+  font-size:.8rem; font-weight:500;
+  color:var(--muted);
+  opacity:1;
+  transition: opacity .3s ease, transform .3s ease;
+  white-space:nowrap;
+}
+
+/* hover-only "View X" badge */
+.hover-badge{
+  position:absolute;
+  bottom:calc(100% + 10px);
+  left:50%; transform:translateX(-50%) translateY(4px);
+  background:#111; color:#fff;
+  padding:4px 13px; border-radius:100px;
+  font-size:.73rem; font-weight:600;
+  white-space:nowrap;
+  opacity:0;
+  transition: opacity .22s ease, transform .22s ease;
+  pointer-events:none;
+}
+.card-wrap:hover .hover-badge{
+  opacity:1; transform:translateX(-50%) translateY(0);
+}
+
+/* ── PREVIEW IMAGES (float up on click) ── */
+.preview-wrap{
+  position:absolute;
+  bottom:calc(100% - 10px);   /* starts tucked behind icon */
+  left:50%; transform:translateX(-50%) translateY(0) scale(1);
+  width:260px;
+  pointer-events:none;
+  z-index:1;           /* below icon by default */
+  opacity:0;
+  transition:none;    /* JS controls this */
+}
+.preview-wrap img,.preview-wrap .preview-mock{
+  width:100%; border-radius:14px;
+  box-shadow:0 20px 60px rgba(0,0,0,.22);
+  display:block;
+}
+
+/* ── EXPANDED INFO (name + desc + button) ── */
+.expanded-info{
+  position:absolute;
+  top:calc(100% + 12px);
+  left:50%; transform:translateX(-50%);
+  text-align:center;
+  width:220px;
+  opacity:0; pointer-events:none;
+  transition: opacity .32s ease, transform .32s ease;
+  transform:translateX(-50%) translateY(10px);
+}
+.expanded-info .proj-name{
+  font-size:1.6rem; font-weight:700; color:#111;
+  margin-bottom:6px;
+}
+.expanded-info .proj-desc{
+  font-size:.82rem; color:var(--muted);
+  line-height:1.55; margin-bottom:14px;
+}
+.view-btn{
+  display:inline-block;
+  border:1px solid rgba(0,0,0,.15);
+  border-radius:100px;
+  padding:7px 20px;
+  font-size:.8rem; font-weight:600;
+  color:#111;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(6px);
+  text-decoration:none;
+  transition: background .2s, transform .2s;
+  cursor:pointer;
+}
+.view-btn:hover{ background:rgba(255,255,255,.9); transform:scale(1.04); }
+
+/* ── COLLAB SOCIAL DOCK ── */
+.collab-dock{
+  position:absolute;
+  top:calc(100% + 14px);
+  left:50%; transform:translateX(-50%) translateY(10px);
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(18px) saturate(180%);
+  border:1px solid rgba(0,0,0,.1);
+  border-radius:24px;
+  padding:14px 20px;
+  display:flex; gap:18px; align-items:center;
+  box-shadow:0 12px 40px rgba(0,0,0,.14);
+  opacity:0; pointer-events:none;
+  transition: opacity .32s ease, transform .32s ease;
+  white-space:nowrap;
+}
+.dock-item{
+  display:flex; flex-direction:column;
+  align-items:center; gap:4px;
+}
+.dock-icon{
+  width:42px; height:42px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem;
+  background:#111; color:#fff;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+}
+.dock-icon.tw{ background:#000; }
+.dock-icon.threads{ background:#111; }
+.dock-item:hover .dock-icon{ transform:translateY(-4px) scale(1.08); }
+.dock-label{ font-size:.7rem; font-weight:600; color:var(--muted); }
+.dock-divider{ width:1px; height:40px; background:rgba(0,0,0,.1); }
+
+/* ─────────────────────────────────────────────
+   STATES: when a card is ACTIVE
+───────────────────────────────────────────── */
+/* The row itself when something is active */
+.cards-row.has-active .card-wrap:not(.active) .app-icon{
+  transform: scale(0.82);
+  filter: blur(1.5px);
+  opacity: .55;
+}
+.cards-row.has-active .card-wrap:not(.active) .card-label{
+  opacity:0;
+}
+
+/* active card: icon moves down slightly to make room */
+.cards-row.has-active .card-wrap.active .app-icon{
+  transform: translateY(10px) scale(0.9);
+}
+
+/* active state: show expanded info */
+.card-wrap.active .expanded-info{
+  opacity:1; pointer-events:all;
+  transform:translateX(-50%) translateY(0);
+}
+.card-wrap.active .collab-dock{
+  opacity:1; pointer-events:all;
+  transform:translateX(-50%) translateY(0);
+}
+.card-wrap.active .card-label{ opacity:0; }
+.card-wrap.active .hover-badge{ display:none; }
+
+/* ─────────────────────────────────────────────
+   PREVIEW ANIMATION (JS-driven via class)
+───────────────────────────────────────────── */
+.preview-wrap.anim-in{
+  animation: previewRise .52s cubic-bezier(.22,.68,0,1.1) forwards;
+}
+.preview-wrap.anim-out{
+  animation: previewDrop .3s ease forwards;
+}
+@keyframes previewRise{
+  from{ opacity:0; transform:translateX(-50%) translateY(40px) scale(.9); }
+  to  { opacity:1; transform:translateX(-50%) translateY(-10px) scale(1); }
+}
+@keyframes previewDrop{
+  from{ opacity:1; transform:translateX(-50%) translateY(-10px) scale(1); }
+  to  { opacity:0; transform:translateX(-50%) translateY(30px) scale(.88); }
+}
+
+/* ─────────────────────────────────────────────
+   BIO
+───────────────────────────────────────────── */
+.bio-wrap{
+  margin-top:52px;
+  max-width:440px;
+  line-height:1.68;
+  font-size:.95rem;
+  color:var(--muted);
+  position:relative; z-index:10;
+  transition: opacity .4s ease, transform .4s ease, filter .4s ease;
+}
+.bio-wrap.pushed{
+  opacity:.25; transform:translateY(8px); filter:blur(1.5px);
+}
+
+/* ─────────────────────────────────────────────
+   PAGINATION DOTS
+───────────────────────────────────────────── */
+.pagination{
+  display:flex; gap:6px; margin-top:32px;
+  position:relative; z-index:10;
+}
+.page-dot{
+  width:6px; height:6px; border-radius:50%;
+  background:rgba(0,0,0,.18);
+  transition:background .3s, transform .3s;
+}
+.page-dot.active{
+  background:#111; transform:scale(1.25);
+}
+
+/* ─────────────────────────────────────────────
+   OVERLAY BLUR (background when card is active)
+───────────────────────────────────────────── */
+.backdrop{
+  position:fixed; inset:0;
+  background:rgba(240,237,232,0);
+  pointer-events:none; z-index:5;
+  transition:background .4s ease;
+}
+.backdrop.dim{ background:rgba(240,237,232,.35); pointer-events:all; }
+
+/* ─────────────────────────────────────────────
+   CHAR ANIMATION KEYFRAMES
+───────────────────────────────────────────── */
+@keyframes charIn{
+  to{ opacity:1; transform:translateY(0); }
+}
+
+/* ─────────────────────────────────────────────
+   PIXEL MOCKUPS (SVG-based previews)
+───────────────────────────────────────────── */
+.mock-portal{
+  width:100%;
+  background:white;
+  border-radius:14px;
+  padding:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+  font-size:.65rem;
+  font-family:var(--font-body);
+  position:relative;
+}
+.mock-portal-header{
+  font-weight:700; font-size:.75rem; margin-bottom:8px; color:#111;
+}
+.mock-row{
+  display:flex; gap:6px; margin-bottom:5px; align-items:center;
+}
+.mock-avatar{ width:20px;height:20px;border-radius:6px;flex-shrink:0; }
+.mock-line{ height:7px; border-radius:4px; background:#eee; }
+
+.mock-droppable{
+  background:#1a1a1f;
+  border-radius:14px;
+  padding:14px;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+  color:#fff;
+}
+.mock-droppable-header{
+  font-weight:700; font-size:.75rem; margin-bottom:8px; color:#fff;
+  opacity:.8;
+}
+.mock-d-row{
+  display:flex; gap:8px; align-items:center; margin-bottom:6px;
+  background:rgba(255,255,255,.07); border-radius:8px; padding:6px 8px;
+}
+.mock-d-dot{ width:26px;height:26px;border-radius:8px;flex-shrink:0; }
+.mock-d-text{ flex:1; }
+.mock-d-line{ height:6px;border-radius:3px;background:rgba(255,255,255,.2); margin-bottom:3px; }
+
+.mock-appstacks{
+  background:white;
+  border-radius:14px;
+  padding:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,.18);
+}
+.mock-as-grid{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:8px;
+}
+.mock-as-app{
+  aspect-ratio:1; border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+}
+
+/* SECOND CARD in previews (layered look) */
+.preview-layer{
+  position:absolute; top:-18px; right:-18px;
+  width:70%; border-radius:12px;
+  box-shadow:0 12px 36px rgba(0,0,0,.2);
+  overflow:hidden;
+}
+
+/* ─────────────────────────────────────────────
+   FOOTER SOCIAL DOCK (bottom of page, Collab)
+───────────────────────────────────────────── */
+.collab-dock .dock-icon svg{
+  width:20px;height:20px;fill:white;
+}
+
+/* ─────────────────────────────────────────────
+   MISC
+───────────────────────────────────────────── */
+.noise{
+  position:fixed;inset:0;z-index:9996;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; opacity:.55;
+}
+
+@media(max-width:600px){
+  .cards-row{ gap:16px; }
+  .app-icon{ width:74px; height:74px; }
+  .preview-wrap{ width:190px; }
+  .expanded-info{ width:180px; }
+  .headline{ font-size:2.2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- noise grain overlay -->
+<div class="noise"></div>
+
+<!-- cursor -->
+<div id="c-dot"></div>
+<div id="c-ring"></div>
+
+<!-- backdrop (click outside to close) -->
+<div class="backdrop" id="backdrop"></div>
+
+<!-- ════════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<section class="hero">
+
+  <!-- HEADLINE -->
+  <div class="headline-wrap" id="headline-wrap">
+    <h1 class="headline" id="headline">Welcome to my corner<br>on the internet :)</h1>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards-row" id="cards-row">
+
+    <!-- ── PORTAL ── -->
+    <div class="card-wrap" id="card-portal" data-id="portal">
+      <div class="hover-badge">View Portal</div>
+
+      <!-- preview floats up on click -->
+      <div class="preview-wrap" id="prev-portal">
+        <div style="position:relative;">
+          <!-- back card (tilted) -->
+          <div style="
+            position:absolute; top:-22px; right:-22px; width:68%; z-index:0;
+            background:#e8f0ff; border-radius:12px; padding:10px;
+            box-shadow:0 12px 36px rgba(0,0,0,.18); transform:rotate(5deg);
+          ">
+            <div style="font-weight:700;font-size:.6rem;color:#555;margin-bottom:6px;">Side Project CRM</div>
+            <div style="height:5px;background:#c8d8ff;border-radius:3px;margin-bottom:4px;width:80%"></div>
+            <div style="height:5px;background:#dde8ff;border-radius:3px;margin-bottom:4px;width:60%"></div>
+            <div style="height:5px;background:#eef3ff;border-radius:3px;width:70%"></div>
+          </div>
+          <!-- main card -->
+          <div class="mock-portal" style="position:relative;z-index:1;">
+            <div class="mock-portal-header">🌀 Portal</div>
+            <div class="mock-row">
+              <div class="mock-avatar" style="background:linear-gradient(135deg,#667eea,#764ba2)"></div>
+              <div style="flex:1">
+                <div class="mock-line" style="width:75%;margin-bottom:3px"></div>
+                <div class="mock-line" style="width:50%"></div>
+              </div>
+            </div>
+            <div class="mock-row">
+              <div class="mock-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c)"></div>
+              <div style="flex:1">
+                <div class="mock-line" style="width:65%;margin-bottom:3px"></div>
+                <div class="mock-line" style="width:40%"></div>
+              </div>
+            </div>
+            <div class="mock-row">
+              <div class="mock-avatar" style="background:linear-gradient(135deg,#4ecdc4,#44a08d)"></div>
+              <div style="flex:1">
+                <div class="mock-line" style="width:80%;margin-bottom:3px"></div>
+                <div class="mock-line" style="width:55%"></div>
+              </div>
+            </div>
+          </div>
+          <!-- small device badge bottom left -->
+          <div style="
+            position:absolute;bottom:-14px;left:-10px;z-index:2;
+            background:#5b6af8;border-radius:10px;padding:6px 10px;
+            box-shadow:0 6px 18px rgba(91,106,248,.4);
+          ">
+            <div style="width:30px;height:20px;background:rgba(255,255,255,.3);border-radius:4px;margin-bottom:3px;"></div>
+            <div style="width:16px;height:12px;background:rgba(255,255,255,.5);border-radius:3px;margin:0 auto;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-icon">
+        <div class="app-icon-placeholder" style="background:linear-gradient(145deg,#dbeeff,#b8d4ff)">
+          <span style="font-size:2.2rem">🌀</span>
+        </div>
+      </div>
+
+      <div class="expanded-info" id="info-portal">
+        <div class="proj-name">Portal</div>
+        <div class="proj-desc">A new way for creative freelancers to sell their services with finesse</div>
+        <span class="view-btn">View Portal</span>
+      </div>
+
+      <span class="card-label">Portal</span>
+    </div>
+
+    <!-- ── DROPPABLE ── -->
+    <div class="card-wrap" id="card-droppable" data-id="droppable">
+      <div class="hover-badge">View Droppable</div>
+
+      <div class="preview-wrap" id="prev-droppable">
+        <div style="position:relative;">
+          <!-- back tilted mockup -->
+          <div style="
+            position:absolute;top:-15px;right:-20px;width:52%;z-index:0;
+            background:#1a1a1f;border-radius:10px;padding:8px;
+            box-shadow:0 10px 30px rgba(0,0,0,.3);transform:rotate(4deg);overflow:hidden;
+          ">
+            <div style="font-size:.55rem;color:#aaa;font-weight:600;margin-bottom:5px;">Send files</div>
+            <div style="height:4px;background:#333;border-radius:2px;margin-bottom:3px;width:80%"></div>
+            <div style="height:4px;background:#2a2a2a;border-radius:2px;width:60%"></div>
+          </div>
+          <!-- main dark mockup -->
+          <div class="mock-droppable" style="position:relative;z-index:1;">
+            <div class="mock-droppable-header">⬇ Droppable</div>
+            <div class="mock-d-row">
+              <div class="mock-d-dot" style="background:#22c55e"></div>
+              <div class="mock-d-text">
+                <div class="mock-d-line" style="width:70%"></div>
+                <div class="mock-d-line" style="width:45%"></div>
+              </div>
+            </div>
+            <div class="mock-d-row">
+              <div class="mock-d-dot" style="background:#3b82f6"></div>
+              <div class="mock-d-text">
+                <div class="mock-d-line" style="width:80%"></div>
+                <div class="mock-d-line" style="width:35%"></div>
+              </div>
+            </div>
+            <div class="mock-d-row">
+              <div class="mock-d-dot" style="background:#f59e0b"></div>
+              <div class="mock-d-text">
+                <div class="mock-d-line" style="width:60%"></div>
+                <div class="mock-d-line" style="width:50%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-icon">
+        <div class="app-icon-placeholder" style="background:linear-gradient(145deg,#c8f5e8,#a8edcc)">
+          <span style="font-size:2.4rem">😊</span>
+        </div>
+      </div>
+
+      <div class="expanded-info" id="info-droppable">
+        <div class="proj-name">Droppable</div>
+        <div class="proj-desc">Native macOS app for sharing large files</div>
+        <span class="view-btn">View Droppable</span>
+      </div>
+
+      <span class="card-label">Droppable</span>
+    </div>
+
+    <!-- ── APP STACKS ── -->
+    <div class="card-wrap" id="card-appstacks" data-id="appstacks">
+      <div class="hover-badge">View App Stacks</div>
+
+      <div class="preview-wrap" id="prev-appstacks">
+        <div style="position:relative;">
+          <!-- floating app icons -->
+          <div style="position:absolute;top:-30px;right:-24px;z-index:3;display:flex;flex-direction:column;gap:6px;">
+            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0ea5e9,#38bdf8);box-shadow:0 4px 12px rgba(14,165,233,.4);display:flex;align-items:center;justify-content:center;font-size:.9rem;">📋</div>
+            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#f97316,#fb923c);box-shadow:0 4px 12px rgba(249,115,22,.4);display:flex;align-items:center;justify-content:center;font-size:.9rem;">📊</div>
+            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#8b5cf6,#a78bfa);box-shadow:0 4px 12px rgba(139,92,246,.4);display:flex;align-items:center;justify-content:center;font-size:.9rem;">✏️</div>
+          </div>
+          <!-- main app mock -->
+          <div class="mock-appstacks" style="position:relative;z-index:1;">
+            <div style="font-weight:700;font-size:.7rem;color:#111;margin-bottom:6px;">🟦 App Stacks</div>
+            <div style="font-size:.6rem;color:#888;margin-bottom:8px;">your<br>tech stack</div>
+            <div class="mock-as-grid">
+              <div class="mock-as-app" style="background:#ffe4e6;">🎨</div>
+              <div class="mock-as-app" style="background:#e0f2fe;">📱</div>
+              <div class="mock-as-app" style="background:#f0fdf4;">📝</div>
+              <div class="mock-as-app" style="background:#fef9c3;">⚡</div>
+              <div class="mock-as-app" style="background:#f3e8ff;">🔧</div>
+              <div class="mock-as-app" style="background:#ffe4e6;">🌐</div>
+              <div class="mock-as-app" style="background:#ecfdf5;">💬</div>
+              <div class="mock-as-app" style="background:#fff7ed;">📊</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-icon">
+        <div class="app-icon-placeholder" style="background:linear-gradient(145deg,#fde8ff,#f8d0ff)">
+          <span style="font-size:2.2rem">🟦</span>
+        </div>
+      </div>
+
+      <div class="expanded-info" id="info-appstacks">
+        <div class="proj-name">App Stacks</div>
+        <div class="proj-desc">Directory of the best designed apps, their tech stacks and makers behind them</div>
+        <span class="view-btn">View App Stacks</span>
+      </div>
+
+      <span class="card-label">App Stacks</span>
+    </div>
+
+    <!-- ── COLLAB WITH ROMAN ── -->
+    <div class="card-wrap" id="card-collab" data-id="collab">
+      <div class="hover-badge">Collab with Roman</div>
+
+      <!-- NO preview for collab — shows dock instead -->
+
+      <div class="app-icon" style="border-radius:50%">
+        <div class="app-icon-placeholder" style="background:linear-gradient(145deg,#e8e0d8,#d4c8bc)">
+          <!-- SVG avatar face -->
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="24" r="14" fill="#c4a882"/>
+            <path d="M32 38c-14 0-20 8-20 12h40c0-4-6-12-20-12z" fill="#2a1f1a"/>
+            <circle cx="27" cy="22" r="2" fill="#1a1a1a"/>
+            <circle cx="37" cy="22" r="2" fill="#1a1a1a"/>
+            <path d="M27 28 Q32 32 37 28" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Social dock (replaces expanded-info for collab) -->
+      <div class="collab-dock" id="dock-collab">
+        <div class="dock-item">
+          <div class="dock-icon" style="background:#0077ff;">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </div>
+          <span class="dock-label">Reach out</span>
+        </div>
+        <div class="dock-divider"></div>
+        <div class="dock-item">
+          <div class="dock-icon tw">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </div>
+          <span class="dock-label">Twitter (X)</span>
+        </div>
+        <div class="dock-item">
+          <div class="dock-icon threads">
+            <svg viewBox="0 0 24 24"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.473 12.01v-.017c.027-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-.605-2.034-1.522-3.487-2.773-4.434-1.318-1-3.052-1.512-5.54-1.53-2.958.018-5.201.81-6.666 2.358C4.162 5.99 3.424 8.342 3.4 12c.024 3.658.762 6.01 2.11 7.472 1.466 1.55 3.71 2.342 6.668 2.358 2.18-.015 3.75-.48 4.82-1.419.99-.872 1.59-2.19 1.83-3.899H16c0 1.068-.23 1.93-.697 2.598-.519.746-1.315 1.265-2.466 1.591C11.955 20.868 9.867 21 8.5 21H7.494c-1.28 0-2.34-.15-3.252-.49-1.37-.507-2.474-1.442-3.16-2.875C.383 16.22 0 14.24 0 12c0-2.24.383-4.22 1.082-5.635.686-1.433 1.79-2.368 3.16-2.875C5.154 3.15 6.214 3 7.494 3H8.5c1.367 0 3.455.132 5.337.7 1.151.326 1.947.845 2.466 1.591.467.668.697 1.53.697 2.598h2.828c-.24-1.71-.84-3.027-1.83-3.899-1.07-.939-2.64-1.404-4.82-1.419-2.958.016-5.202.808-6.668 2.358C4.162 6.49 3.424 8.842 3.4 12.5"/></svg>
+          </div>
+          <span class="dock-label">Threads</span>
+        </div>
+      </div>
+
+      <span class="card-label">Collab with Roman</span>
+    </div>
+
+  </div><!-- /cards-row -->
+
+  <!-- BIO TEXT -->
+  <div class="bio-wrap" id="bio-wrap">
+    Hey there! I'm Roman — a Product Designer with a burning desire to build cool stuff. I currently design at ElevenLabs and run tools for creatives — Portal and Droppable, share awesome stories through App Stacks, and occasionally collab with visionaries to bring even more ideas to life.
+  </div>
+
+  <!-- PAGINATION DOTS -->
+  <div class="pagination" id="pagination">
+    <div class="page-dot" data-card="portal"></div>
+    <div class="page-dot" data-card="droppable"></div>
+    <div class="page-dot" data-card="appstacks"></div>
+    <div class="page-dot" data-card="collab"></div>
+  </div>
+
+</section>
+
+<script>
+/* ════════════════════════════════════════════
+   CURSOR
+════════════════════════════════════════════ */
+const dot = document.getElementById('c-dot');
+const ring = document.getElementById('c-ring');
+let mx=0,my=0,rx=0,ry=0;
+
+document.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  dot.style.left = mx+'px'; dot.style.top = my+'px';
+});
+(function animRing(){
+  rx += (mx-rx)*0.11; ry += (my-ry)*0.11;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  requestAnimationFrame(animRing);
+})();
+
+// hover detection
+document.querySelectorAll('a,button,.card-wrap,.view-btn,.dock-item').forEach(el=>{
+  el.addEventListener('mouseenter', ()=>document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', ()=>document.body.classList.remove('cursor-hover'));
+});
+document.addEventListener('mousedown', ()=>document.body.classList.add('cursor-click'));
+document.addEventListener('mouseup',   ()=>document.body.classList.remove('cursor-click'));
+
+/* ════════════════════════════════════════════
+   HEADLINE LETTER-BY-LETTER REVEAL
+════════════════════════════════════════════ */
+(function revealHeadline(){
+  const h = document.getElementById('headline');
+  const html = h.innerHTML; // preserve <br>
+  // split by char but keep <br>
+  let out = '';
+  let delay = 0;
+  let inTag = false;
+  for(let i=0;i<html.length;i++){
+    const ch = html[i];
+    if(ch==='<'){ inTag=true; out+=ch; continue; }
+    if(ch==='>'){ inTag=false; out+=ch; continue; }
+    if(inTag){ out+=ch; continue; }
+    if(ch===' '){ out+='<span style="display:inline-block;"> </span>'; continue; }
+    delay += 0.018;
+    out += `<span class="char" style="animation-delay:${delay}s">${ch===')'?'<span style="display:inline-block;animation:wave 2.2s ${delay+0.5}s ease-in-out infinite">)</span>':ch}</span>`;
+  }
+  h.innerHTML = out;
+})();
+
+// wave keyframe
+const waveKF = document.createElement('style');
+waveKF.textContent = `
+@keyframes wave{
+  0%,100%{transform:rotate(0deg)}
+  30%{transform:rotate(20deg)}
+  70%{transform:rotate(-8deg)}
+}`;
+document.head.appendChild(waveKF);
+
+/* ════════════════════════════════════════════
+   CARD CLICK — EXACT PIXELWRLD ANIMATION
+════════════════════════════════════════════ */
+const cardsRow   = document.getElementById('cards-row');
+const headlineW  = document.getElementById('headline-wrap');
+const bioWrap    = document.getElementById('bio-wrap');
+const backdrop   = document.getElementById('backdrop');
+const pagination = document.getElementById('pagination');
+const pageDots   = pagination.querySelectorAll('.page-dot');
+
+let activeCard = null;
+let activePreview = null;
+
+function getCardElements(cardEl){
+  const id = cardEl.dataset.id;
+  return {
+    id,
+    icon:        cardEl.querySelector('.app-icon'),
+    preview:     document.getElementById('prev-'+id),
+    info:        document.getElementById('info-'+id),
+    dock:        document.getElementById('dock-'+id),
+    label:       cardEl.querySelector('.card-label'),
+  };
+}
+
+function activateCard(cardEl){
+  if(activeCard === cardEl) return; // already active, do nothing
+
+  // deactivate previous
+  if(activeCard) silentDeactivate(activeCard);
+
+  activeCard = cardEl;
+  const {id, preview} = getCardElements(cardEl);
+
+  // push headline and bio
+  headlineW.classList.add('pushed');
+  bioWrap.classList.add('pushed');
+
+  // show active state
+  cardsRow.classList.add('has-active');
+  cardEl.classList.add('active');
+
+  // animate preview image rising up
+  if(preview){
+    preview.style.zIndex = 10;
+    preview.classList.remove('anim-out');
+    void preview.offsetWidth; // reflow
+    preview.classList.add('anim-in');
+    activePreview = preview;
+  }
+
+  // update pagination dots
+  pageDots.forEach(d=>{
+    d.classList.toggle('active', d.dataset.card === id);
+  });
+}
+
+function silentDeactivate(cardEl){
+  const {preview} = getCardElements(cardEl);
+  cardEl.classList.remove('active');
+  if(preview){
+    preview.classList.remove('anim-in');
+    preview.classList.add('anim-out');
+    setTimeout(()=>{
+      preview.classList.remove('anim-out');
+      preview.style.zIndex = 1;
+    }, 300);
+  }
+}
+
+function deactivateAll(){
+  if(!activeCard) return;
+  silentDeactivate(activeCard);
+  activeCard = null;
+  activePreview = null;
+
+  cardsRow.classList.remove('has-active');
+  headlineW.classList.remove('pushed');
+  bioWrap.classList.remove('pushed');
+  pageDots.forEach(d=>d.classList.remove('active'));
+}
+
+// Card hover — activate on mouseenter, deactivate on mouseleave
+document.querySelectorAll('.card-wrap').forEach(card=>{
+  card.addEventListener('mouseenter', ()=> activateCard(card));
+  card.addEventListener('mouseleave', ()=> deactivateAll());
+});
+
+// Keyboard ESC
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape') deactivateAll();
+});
+
+/* ════════════════════════════════════════════
+   MAGNETIC HOVER ON ICONS
+════════════════════════════════════════════ */
+document.querySelectorAll('.app-icon').forEach(icon=>{
+  const wrap = icon.closest('.card-wrap');
+  wrap.addEventListener('mousemove', e=>{
+    if(cardsRow.classList.contains('has-active') && !wrap.classList.contains('active')) return;
+    const rect = icon.getBoundingClientRect();
+    const cx = rect.left + rect.width/2;
+    const cy = rect.top  + rect.height/2;
+    const dx = (e.clientX-cx)*0.18;
+    const dy = (e.clientY-cy)*0.18;
+    icon.style.transform = `translate(${dx}px,${dy}px) scale(1.07)`;
+  });
+  wrap.addEventListener('mouseleave', ()=>{
+    if(!wrap.classList.contains('active'))
+      icon.style.transform = '';
+  });
+});
+
+/* ════════════════════════════════════════════
+   SUBTLE PARALLAX (mouse moves whole scene)
+════════════════════════════════════════════ */
+document.addEventListener('mousemove', e=>{
+  const cx = window.innerWidth/2;
+  const cy = window.innerHeight/2;
+  const dx = (e.clientX-cx)/cx;
+  const dy = (e.clientY-cy)/cy;
+  // headline slight parallax
+  if(!headlineW.classList.contains('pushed')){
+    headlineW.style.transform = `translate(${dx*5}px,${dy*3}px)`;
+  }
+});
+</script>
+</body>
+</html>
