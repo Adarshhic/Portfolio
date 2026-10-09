@@ -6,8 +6,8 @@ import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
 export const metadata = {
-  title: "Uses | Manish Kumar",
-  description: "Tools, software, and gear used on a daily basis by Manish Kumar.",
+  title: "Uses | Adarsh Mishra",
+  description: "Tools, software, and gear used on a daily basis by Adarsh Mishra.",
 };
 
 const USES_DATA = [

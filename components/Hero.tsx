@@ -3,18 +3,17 @@
 import React, { useState, useEffect, memo } from "react";
 import Tooltip from "./Tooltip";
 import {
-  FaTwitter,
   FaLinkedin,
   FaGithub,
-  FaInstagram,
-  FaMedium,
   FaRegFileAlt,
   FaQrcode,
   FaUser,
+  FaCode,
 } from "react-icons/fa";
 import { HiOutlineClock } from "react-icons/hi";
 import { MdOutlineLocationOn } from "react-icons/md";
 import { BsPatchCheckFill } from "react-icons/bs";
+import { SiLeetcode } from "react-icons/si";
 
 const DECORATIONS = [
   { filename: "/images/decorations/soul_leaving_body.png", name: "Soul Leaving Body", dayIndex: 0 },
@@ -29,27 +28,22 @@ const DECORATIONS = [
 const SOCIAL_LINKS = [
   {
     name: "LinkedIn",
-    url: "https://linkedin.com/in/imanish02",
+    url: "https://www.linkedin.com/in/adarshic/",
     icon: <FaLinkedin />,
   },
   {
     name: "GitHub",
-    url: "https://github.com/ig-imanish",
+    url: "https://github.com/Adarshhic",
     icon: <FaGithub />,
   },
   {
-    name: "Instagram",
-    url: "https://instagram.com/manixh.dev",
-    icon: <FaInstagram />,
-  },
-  {
-    name: "Medium",
-    url: "https://medium.com/@manixh02",
-    icon: <FaMedium />,
+    name: "LeetCode",
+    url: "https://github.com/Adarshhic",
+    icon: <SiLeetcode />,
   },
   {
     name: "Resume",
-    url: "https://drive.google.com/file/d/1zBwD9nwcVyMwwhu_FEQzQzrmD5Ky1V9x/view?usp=drivesdk",
+    url: "/resume",
     icon: <FaRegFileAlt />,
   },
 ];
@@ -61,6 +55,7 @@ const LiveClock = memo(function LiveClock() {
     const updateTime = () => {
       const now = new Date();
       const localeString = now.toLocaleTimeString("en-US", {
+        timeZone: "Asia/Kolkata",
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
@@ -107,7 +102,7 @@ export default function Hero() {
           <div className="user-image hero-section-avatar">
             <img
               src={isQrCode ? "/images/profile/qr-code.webp" : "/images/profile/pfp-latest.jpg"}
-              alt={isQrCode ? "QR Code" : "user"}
+              alt={isQrCode ? "QR Code" : "Adarsh Mishra"}
               style={{
                 transition: "opacity 0.3s ease",
                 backgroundColor: "#1F1F23",
@@ -138,8 +133,8 @@ export default function Hero() {
           <div className="hero-section-profile-main">
             <div className="hero-section-profile-name-row">
               <h1 className="hero-section-profile-name">
-                Manish Kumar{" "}
-                <Tooltip text="My heart when I saw you" position="right">
+                Adarsh Mishra{" "}
+                <Tooltip text="Always ready to build something awesome" position="right">
                   <span className="heart">
                     <svg
                       stroke="currentColor"
@@ -163,15 +158,15 @@ export default function Hero() {
             </div>
 
             <div className="hero-section-profile-username">
-              <a href="http://x.com/Manixh02" target="_blank" rel="noopener noreferrer">
-                @manixh02
+              <a href="https://github.com/Adarshhic" target="_blank" rel="noopener noreferrer">
+                @adarshic
               </a>
             </div>
 
             <div className="hero-section-profile-status-row">
               <span
                 className="availability-text"
-                onClick={() => window.open("https://ossium.in/?ref=manixh.dev", "_blank")}
+                onClick={() => window.open("https://github.com/Adarshhic/codzy", "_blank")}
                 style={{
                   cursor: "pointer",
                   fontWeight: "700",
@@ -182,17 +177,12 @@ export default function Hero() {
                 }}
               >
                 <Tooltip
-                  text="A platform for open source contributors to discover and collaborate on projects"
+                  text="LeetCode-style online judge & coding platform"
                   position="bottom"
                 >
                   <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                    Building ossium.in{" "}
-                    <img
-                      src="https://ossium.in/ossium_logo_trans.png"
-                      alt="ossium"
-                      height="15px"
-                      style={{ height: "15px" }}
-                    />
+                    Building Codzy{" "}
+                    <FaCode style={{ color: "#38bdf8", fontSize: "14px" }} />
                   </span>
                 </Tooltip>
               </span>
@@ -200,7 +190,7 @@ export default function Hero() {
 
             <div className="hero-section-profile-meta-row">
               <span className="hero-section-profile-meta">
-                <MdOutlineLocationOn /> India
+                <MdOutlineLocationOn /> Lucknow, India
               </span>
               <span className="hero-section-profile-dot">•</span>
               <LiveClock />
@@ -216,23 +206,22 @@ export default function Hero() {
               <li className="about-bio-item">
                 <span className="about-bio-marker"></span>
                 <span>
-                  Hi, I am a <span className="bio-highlight">Full Stack Developer</span>
+                  Hi, I am a <span className="bio-highlight">Full Stack Developer</span> &amp;{" "}
+                  <span className="bio-highlight">Frontend Developer Intern</span> at Stravio Media.
                 </span>
               </li>
               <li className="about-bio-item">
                 <span className="about-bio-marker"></span>
                 <span>
-                  Developer of <span className="bio-highlight">Ossium</span>, helping 1,500+
-                  developers discover and contribute to{" "}
-                  <span className="bio-highlight">open source</span>.
+                  Creator of <span className="bio-highlight">Codzy</span> &amp; AI-driven SaaS solutions,
+                  building fast, scalable, and responsive web products.
                 </span>
               </li>
               <li className="about-bio-item">
                 <span className="about-bio-marker"></span>
                 <span>
-                  Always <span className="bio-highlight">shipping</span>,{" "}
-                  <span className="bio-highlight">learning</span>, and turning ideas into products
-                  people actually use.
+                  Solved <span className="bio-highlight">200+ DSA problems</span> across LeetCode &amp; GFG,
+                  and <span className="bio-highlight">Smart India Hackathon</span> finalist.
                 </span>
               </li>
             </ul>
@@ -242,31 +231,20 @@ export default function Hero() {
 
           <div className="community-links">
             <a
-              href="https://x.com/Manixh02"
+              href="https://github.com/Adarshhic"
               target="_blank"
               rel="noopener noreferrer"
               className="twitter-card"
             >
               <div className="twitter-card-left">
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 512 512"
-                  className="twitter-icon"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
-                </svg>
+                <FaGithub className="twitter-icon" style={{ fontSize: "1.3em" }} />
               </div>
               <div className="twitter-card-middle">
                 <span className="twitter-name">
-                  Manish Kumar{" "}
+                  Adarsh Mishra{" "}
                   <BsPatchCheckFill style={{ color: "#1D9BF0" }} />
                 </span>
-                <span className="twitter-handle">@Manixh02</span>
+                <span className="twitter-handle">@Adarshhic</span>
               </div>
               <div className="twitter-card-right">
                 <span className="twitter-follow-btn">Follow</span>
@@ -274,34 +252,30 @@ export default function Hero() {
             </a>
 
             <a
-              href="https://discord.gg/VxxfMdM6eN"
+              href="https://www.linkedin.com/in/adarshic/"
               target="_blank"
               rel="noopener noreferrer"
               className="discord-invite"
             >
               <div className="discord-invite-left">
-                <img
-                  src="https://res.cloudinary.com/duwlje1nq/image/upload/v1783249504/f7943dfd3ac9498d8875f9922e4577f0_mqs8mu.webp"
-                  alt="Discord"
-                  className="discord-server-logo"
-                />
+                <FaLinkedin style={{ fontSize: "1.4em", color: "#0077b5" }} />
               </div>
               <div className="discord-invite-middle">
-                <span className="discord-server-name">Tech Nerds ( discord )</span>
+                <span className="discord-server-name">Adarsh Mishra ( LinkedIn )</span>
                 <span className="discord-server-stats">
                   <span className="discord-online-dot"></span>
-                  <span>For Developers</span>
+                  <span>Connect &amp; Collaborate</span>
                 </span>
               </div>
               <div className="discord-invite-right">
-                <span className="discord-join-btn">Join :)</span>
+                <span className="discord-join-btn">Connect</span>
               </div>
             </a>
           </div>
 
           <div className="contact-me">
-            <Tooltip text="24x7 available for your emails" position="top">
-              <a target="_blank" href="mailto:work.manishh02@gmail.com">
+            <Tooltip text="Feel free to email me directly" position="top">
+              <a target="_blank" href="mailto:adarsh.mishradu0001@gmail.com">
                 <button type="button" className="contact-btn">
                   <svg
                     height="1em"
@@ -338,8 +312,8 @@ export default function Hero() {
                 <Tooltip key={link.name} text={link.name} position="top">
                   <a
                     href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    target={link.url.startsWith("http") ? "_blank" : undefined}
+                    rel={link.url.startsWith("http") ? "noopener noreferrer" : undefined}
                     className="contact-link-btn"
                   >
                     <span className="contact-link-icon">{link.icon}</span>

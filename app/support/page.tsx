@@ -19,26 +19,26 @@ import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 
 const QUICK_SUPPORT = [
   {
-    label: "PayPal",
-    url: "https://paypal.me/manixh02",
-    icon: <FaPaypal />,
-    subtext: "One-time gift via PayPal",
+    label: "GitHub Sponsors",
+    url: "https://github.com/sponsors/Adarshhic",
+    icon: <FaGithub />,
+    subtext: "Recurring support on GitHub",
   },
   {
     label: "Buy Me a Coffee",
-    url: "https://buymeacoffee.com/manixh",
+    url: "https://buymeacoffee.com/adarsh",
     icon: <FaCoffee />,
     subtext: "Fuel my late-night builds",
   },
   {
-    label: "GitHub Sponsors",
-    url: "https://github.com/sponsors/ig-imanish",
-    icon: <FaGithub />,
-    subtext: "Recurring support on GitHub",
+    label: "PayPal",
+    url: "https://paypal.me/adarsh",
+    icon: <FaPaypal />,
+    subtext: "One-time gift via PayPal",
   },
 ];
 
-const UPI_ID = "hey.manish@fam";
+const UPI_ID = "adarsh.mishra@upi";
 
 interface CryptoCoin {
   key: string;

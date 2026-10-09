@@ -45,7 +45,7 @@ function ExperienceItem({
         <div className="exp-header">
           <div className="exp-header-left">
             <div className="exp-logo">
-              {logoUrl && (
+              {logoUrl ? (
                 <img
                   src={logoUrl}
                   alt={`${company} logo`}
@@ -53,6 +53,23 @@ function ExperienceItem({
                   loading="lazy"
                   decoding="async"
                 />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "#262626",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    color: "#a3a3a3",
+                    borderRadius: "6px",
+                  }}
+                >
+                  {company.substring(0, 2).toUpperCase()}
+                </div>
               )}
             </div>
             <div className="exp-company-info">
@@ -113,7 +130,7 @@ function ExperienceItem({
 }
 
 export default function Experience() {
-  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [expandedId, setExpandedId] = useState<number | null>(1);
 
   return (
     <div>
@@ -124,39 +141,50 @@ export default function Experience() {
           <div className="exp-timeline-line" />
 
           <ExperienceItem
-            company="mx corp."
-            role="Developer"
-            dates="Dec 2025 - Now"
+            company="Stravio Media Solutions LLP"
+            role="Frontend Developer Intern"
+            dates="2026 – Present"
             status="present"
-            logoUrl="https://avatars.githubusercontent.com/u/250987841?s=200&v=4"
-            links={[{ url: "https://mxcorp.in/?ref=manixh.dev" }]}
+            logoUrl="/images/misc/jabsz.png"
             description={[
-              "Products owned by mx corp. - Ossium, mx-icons, Repolyze ...more.",
-              "Achieved 1200+ Users on our Products",
-              "Sharing journey on X (@Manixh02) with 5,500+ followers",
+              "Built and deployed custom Shopify storefronts for multiple client brands, including full theme development, hero/landing section redesigns, and GSAP-based scroll animations.",
+              "Developed responsive, production-ready websites using Next.js and React, handling everything from component architecture to deployment.",
+              "Collaborated closely with design and product teams to translate brand and business requirements into polished, performant web experiences across e-commerce and marketing sites.",
             ]}
             isExpanded={expandedId === 1}
             onToggle={() => setExpandedId(expandedId === 1 ? null : 1)}
           />
 
           <ExperienceItem
-            company="JabszGaming"
-            role="Full Stack Dev Intern"
-            dates="May 2025 - Sep 2025"
-            status="past"
-            logoUrl="/images/misc/jabsz.png"
-            links={[{ url: "https://www.jabszgamingstudios.com/" }]}
+            company="Open Source & Independent Dev"
+            role="Full Stack Developer"
+            dates="2024 – Present"
+            status="present"
             description={[
-              "Built a Project where users can solve Coding Problems",
-              "Compete with other users and shine on the leaderboard",
-              "Collaborated with the team remotely",
+              "Architected Codzy (LeetCode clone) with 50+ DSA problems, Judge0 API code execution across 3+ languages, and WebSocket study rooms.",
+              "Built full-stack AI Customer Support Chatbot SaaS with Gemini API, Scalekit org auth, and embeddable JS widget.",
+              "Engineered 10+ RESTful APIs with JWT authentication, RBAC, and MongoDB message storage.",
             ]}
             isExpanded={expandedId === 2}
             onToggle={() => setExpandedId(expandedId === 2 ? null : 2)}
           />
+
+          <ExperienceItem
+            company="Smart India Hackathon & CP"
+            role="Finalist & Problem Solver"
+            dates="2023 – 2024"
+            status="past"
+            description={[
+              "Solved 200+ problems on LeetCode and GeeksforGeeks, mastering Data Structures & Algorithms.",
+              "Smart India Hackathon 2024 – Selected at college level for India's largest national hackathon.",
+              "Completed Mobile Application Development and Python Full Stack Development certifications.",
+            ]}
+            isExpanded={expandedId === 3}
+            onToggle={() => setExpandedId(expandedId === 3 ? null : 3)}
+          />
         </div>
 
-        <GitHubCalendar username="ig-imanish" />
+        <GitHubCalendar username="Adarshhic" />
       </section>
     </div>
   );

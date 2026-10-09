@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 import Tooltip from "./Tooltip";
 
 const NAV_LINKS = [
@@ -41,7 +40,7 @@ export default function Navbar() {
 
         <Tooltip text="Give A Star Please" position="bottom">
           <a
-            href="https://github.com/ig-imanish/manixh"
+            href="https://github.com/Adarshhic/Portfolio"
             target="_blank"
             rel="noopener noreferrer"
             className="navbar-star"

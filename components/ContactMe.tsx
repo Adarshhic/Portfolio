@@ -2,49 +2,37 @@
 
 import React from "react";
 import {
-  FaTwitter,
   FaLinkedin,
   FaGithub,
-  FaInstagram,
-  FaMedium,
   FaRegFileAlt,
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
+import { SiLeetcode } from "react-icons/si";
 
 const CONNECT_LINKS = [
   {
-    name: "Twitter",
-    url: "https://x.com/Manixh02",
-    icon: <FaTwitter />,
+    name: "Email",
+    url: "mailto:adarsh.mishradu0001@gmail.com",
+    icon: <MdEmail />,
   },
   {
     name: "LinkedIn",
-    url: "https://linkedin.com/in/imanish02",
+    url: "https://www.linkedin.com/in/adarshic/",
     icon: <FaLinkedin />,
   },
   {
     name: "GitHub",
-    url: "https://github.com/ig-imanish",
+    url: "https://github.com/Adarshhic",
     icon: <FaGithub />,
   },
   {
-    name: "Instagram",
-    url: "https://instagram.com/manixh.dev",
-    icon: <FaInstagram />,
-  },
-  {
-    name: "Medium",
-    url: "https://medium.com/@manixh02",
-    icon: <FaMedium />,
-  },
-  {
-    name: "Email",
-    url: "mailto:work.manishh02@gmail.com",
-    icon: <MdEmail />,
+    name: "LeetCode",
+    url: "https://github.com/Adarshhic",
+    icon: <SiLeetcode />,
   },
   {
     name: "Resume",
-    url: "https://drive.google.com/file/d/1zBwD9nwcVyMwwhu_FEQzQzrmD5Ky1V9x/view?usp=drivesdk",
+    url: "/resume",
     icon: <FaRegFileAlt />,
   },
 ];
@@ -62,8 +50,8 @@ export default function ContactMe() {
             <a
               key={idx}
               href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={link.url.startsWith("http") ? "_blank" : undefined}
+              rel={link.url.startsWith("http") ? "noopener noreferrer" : undefined}
               className="contact-link-btn"
             >
               <span className="contact-link-icon">{link.icon}</span>

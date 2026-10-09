@@ -7,8 +7,8 @@ import Footer from "@/components/Footer";
 import { FiArrowLeft } from "react-icons/fi";
 
 export const metadata = {
-  title: "Projects | Manish Kumar",
-  description: "Explore open-source, full-stack, and personal projects built by Manish Kumar.",
+  title: "Projects | Adarsh Mishra",
+  description: "Explore open-source, full-stack, and personal projects built by Adarsh Mishra.",
 };
 
 export default function ProjectsPage() {

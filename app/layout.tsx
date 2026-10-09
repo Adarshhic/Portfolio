@@ -19,34 +19,34 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://manixh.vercel.app"),
-  title: "Manish Kumar | Full Stack Developer | MERN & Java Full Stack",
+  metadataBase: new URL("https://github.com/Adarshhic/Portfolio"),
+  title: "Adarsh Mishra | Full Stack & Frontend Developer",
   description:
-    "Manish Kumar is a Full Stack Developer specializing in MERN Stack, Java Spring Boot, and building end-to-end applications. Explore projects, skills, and contact for collaborations.",
+    "Adarsh Mishra is a Full Stack Developer and Frontend Developer Intern specializing in React, Next.js, Node.js, Express, MongoDB, and modern web engineering. Explore projects, skills, and resume.",
   keywords: [
-    "Manish Kumar",
+    "Adarsh Mishra",
     "Full Stack Developer",
-    "MERN Stack",
-    "Java Developer",
-    "Spring Boot",
-    "React",
+    "Frontend Developer",
+    "React Developer",
+    "Next.js Developer",
     "Node.js",
-    "Express",
+    "Express.js",
     "MongoDB",
-    "MySQL",
-    "Docker",
-    "GitHub",
-    "Portfolio",
+    "TypeScript",
+    "Tailwind CSS",
+    "Codzy",
+    "Smart India Hackathon",
     "Software Engineer",
+    "Lucknow",
     "India",
   ],
-  authors: [{ name: "Manish Kumar" }],
+  authors: [{ name: "Adarsh Mishra" }],
   openGraph: {
-    title: "Manish Kumar | Full Stack Developer | MERN & Java Full Stack",
+    title: "Adarsh Mishra | Full Stack & Frontend Developer",
     description:
-      "Building real-world applications with Java, MERN Stack, microservices, and cloud technologies. Open to opportunities in software development.",
-    url: "https://manixh.vercel.app/",
-    siteName: "Manish Kumar Portfolio",
+      "Building performant, real-world web applications with Next.js, React, Node.js, and modern cloud technologies. Open to full-stack and frontend roles.",
+    url: "https://github.com/Adarshhic/Portfolio",
+    siteName: "Adarsh Mishra Portfolio",
     images: [
       {
         url: "/images/profile/pfp-latest.jpg",
@@ -59,10 +59,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Manish Kumar | Full Stack Developer | MERN & Java Full Stack",
+    title: "Adarsh Mishra | Full Stack & Frontend Developer",
     description:
-      "Full Stack Developer focused on Java, MERN, microservices, and cloud. Check out my projects and get in touch!",
-    creator: "@Manixh02",
+      "Full Stack Developer focused on React, Next.js, Node.js, and scalable web apps. Check out my projects and get in touch!",
+    creator: "@adarshic",
     images: ["/images/profile/pfp-latest.jpg"],
   },
   icons: {
