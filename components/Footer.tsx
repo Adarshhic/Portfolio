@@ -1,18 +1,47 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 
 export default function Footer() {
-  return (
-    <footer className="w-full bg-[#0A0A0A] border-t border-dark/30 py-5 px-6 md:px-12 flex items-center justify-between select-none">
-      {/* Left side: Space Grotesk 11px */}
-      <span className="font-grotesk text-[11px] text-[#555] tracking-wide">
-        Built by{" "}
-        <span className="text-yellow font-bold">Adarsh Mishra</span> · 2026
-      </span>
+  const [istTime, setIstTime] = useState("");
 
-      {/* Right side: Dancing Script 13px */}
-      <span className="font-dancing text-[13px] text-[#444] italic">
-        designed with intention
-      </span>
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      };
+      const formatted = new Intl.DateTimeFormat("en-GB", options).format(now);
+      setIstTime(`${formatted} IST`);
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <footer className="footer">
+      <div className="footer-content">
+        <div className="footer-quote">
+          &ldquo;Nothing Is Perfect &ndash; But You Can Make It Better.&rdquo;
+        </div>
+        <div className="footer-info">
+          <div className="footer-made">Designed &amp; Made with ❤️</div>
+          <div className="footer-bottom">
+            <span className="footer-copyright">
+              {currentYear}. All rights reserved
+            </span>
+            <span className="footer-visitors">{istTime || "IST"}</span>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 }

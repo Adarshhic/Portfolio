@@ -1,158 +1,105 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
-import { FiZap, FiAward } from "react-icons/fi";
-import SectionTag from "@/components/ui/SectionTag";
-import PillTag from "@/components/ui/PillTag";
+import SectionTitle from "./SectionTitle";
+import {
+  FaJava,
+  FaHtml5,
+  FaCss3Alt,
+  FaJs,
+  FaReact,
+  FaNodeJs,
+  FaGitAlt,
+  FaGithub,
+  FaDocker,
+  FaWindows,
+  FaLinux,
+} from "react-icons/fa";
+import {
+  SiTypescript,
+  SiExpress,
+  SiSpring,
+  SiSpringboot,
+  SiSpringsecurity,
+  SiMysql,
+  SiMongodb,
+  SiPostman,
+  SiSwagger,
+  SiFirebase,
+  SiSupabase,
+  SiVercel,
+  SiNetlify,
+  SiRender,
+  SiNotion,
+  SiThymeleaf,
+  SiApachemaven,
+} from "react-icons/si";
+import { VscVscode } from "react-icons/vsc";
 
-interface SkillItem {
-  label: string;
-  value: number; // Out of 10
-}
-
-const SKILLS: SkillItem[] = [
-  { label: "React / Next.js", value: 9 },
-  { label: "Node / Express", value: 8 },
-  { label: "TypeScript", value: 8 },
-  { label: "MongoDB / SQL", value: 7 },
-  { label: "C / C++", value: 8 },
-  { label: "WebSockets / JWT", value: 7 },
+const TECH_SKILLS = [
+  { name: "Java", icon: <FaJava style={{ color: "#df3d14" }} /> },
+  { name: "HTML", icon: <FaHtml5 style={{ color: "#e34c26" }} /> },
+  { name: "CSS", icon: <FaCss3Alt style={{ color: "#2965f1" }} /> },
+  { name: "JavaScript", icon: <FaJs style={{ color: "#f7df1e" }} /> },
+  { name: "TypeScript", icon: <SiTypescript style={{ color: "#3178c6" }} /> },
+  { name: "React", icon: <FaReact style={{ color: "#61dafb" }} /> },
+  { name: "NodeJS", icon: <FaNodeJs style={{ color: "#68a063" }} /> },
+  { name: "Express", icon: <SiExpress style={{ color: "#ffffff" }} /> },
+  { name: "Spring Security", icon: <SiSpringsecurity style={{ color: "#6DB33F" }} /> },
+  { name: "Spring Jpa", icon: <SiSpring style={{ color: "#6DB33F" }} /> },
+  { name: "Spring MVC", icon: <SiSpring style={{ color: "#6DB33F" }} /> },
+  { name: "Thymeleaf", icon: <SiThymeleaf style={{ color: "#6DB33F" }} /> },
+  { name: "Spring Boot", icon: <SiSpringboot style={{ color: "#6DB33F" }} /> },
+  { name: "MySQL", icon: <SiMysql style={{ color: "#00758f" }} /> },
+  { name: "MongoDB", icon: <SiMongodb style={{ color: "#01ec64" }} /> },
 ];
 
-const TOOLS = [
-  "Git",
-  "GitHub",
-  "VS Code",
-  "Postman",
-  "Linux",
-  "Cloudinary",
-  "Judge0",
-  "Redis",
-  "Docker*",
-  "AWS*"
-];
-
-const CERTS = [
-  { name: "Mobile App Dev", organization: "L&T EduTech", filled: true },
-  { name: "Python Full Stack", organization: "SRDT", filled: true },
-  { name: "Google Gen AI", organization: "Top 10", filled: false },
+const TOOL_SKILLS = [
+  { name: "Git", icon: <FaGitAlt style={{ color: "#f34f29" }} /> },
+  { name: "GitHub", icon: <FaGithub style={{ color: "#ffffff" }} /> },
+  { name: "Postman", icon: <SiPostman style={{ color: "#f34f29" }} /> },
+  { name: "Swagger", icon: <SiSwagger style={{ color: "#01ec64" }} /> },
+  { name: "VsCode", icon: <VscVscode style={{ color: "#007acc" }} /> },
+  { name: "Linux", icon: <FaLinux style={{ color: "#ffffff" }} /> },
+  { name: "Windows", icon: <FaWindows style={{ color: "#0078d4" }} /> },
+  { name: "Docker", icon: <FaDocker style={{ color: "#2496ed" }} /> },
+  { name: "Maven", icon: <SiApachemaven style={{ color: "#c71e3a" }} /> },
+  { name: "Firebase", icon: <SiFirebase style={{ color: "#ffca28" }} /> },
+  { name: "Supabase", icon: <SiSupabase style={{ color: "#01ec64" }} /> },
+  { name: "Vercel", icon: <SiVercel style={{ color: "#ffffff" }} /> },
+  { name: "Netlify", icon: <SiNetlify style={{ color: "#00c58e" }} /> },
+  { name: "Render", icon: <SiRender style={{ color: "#ffffff" }} /> },
+  { name: "Notion", icon: <SiNotion style={{ color: "#ffffff" }} /> },
 ];
 
 export default function Skills() {
   return (
-    <>
-      {/* Column 1: Skills (bg-cream) */}
-      <div
-        id="skills"
-        className="bg-cream p-8 flex flex-col justify-between border-b-2 lg:border-b-0 lg:border-r-2 border-dark select-none"
-      >
-        <div>
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-8">
-            <SectionTag text="Skills" icon={<FiZap />} />
-            <span className="font-dancing text-muted text-sm sm:ml-2">
-              things i can do
-            </span>
-          </div>
+    <section className="skill-section">
+      <SectionTitle>My Skills</SectionTitle>
 
-          {/* Skill Bars List */}
-          <div className="flex flex-col gap-6">
-            {SKILLS.map((skill, index) => (
-              <div key={skill.label} className="flex flex-col gap-1.5 w-full">
-                <div className="flex justify-between items-end">
-                  <span className="font-grotesk font-bold text-xs uppercase tracking-wider text-dark">
-                    {skill.label}
-                  </span>
-                  <span className="font-grotesk font-bold text-xs text-dark">
-                    {skill.value}/10
-                  </span>
-                </div>
-                <div className="w-full bg-[#D1CDCE] h-4 border-2 border-dark">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.value * 10}%` }}
-                    viewport={{ once: true }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 60,
-                      damping: 20,
-                      delay: index * 0.05,
-                    }}
-                    className="h-full bg-dark"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* Marquee Row 1 */}
+      <div className="marquee-container">
+        <div className="marquee">
+          {[...TECH_SKILLS, ...TECH_SKILLS, ...TECH_SKILLS].map((skill, index) => (
+            <div key={`tech-${index}`} className="skill-pill">
+              <span className="skill-icon">{skill.icon}</span>
+              <span className="skill-name">{skill.name}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Column 2: Tools (bg-white) */}
-      <div className="bg-white p-8 flex flex-col justify-between border-b-2 lg:border-b-0 lg:border-r-2 border-dark select-none">
-        <div>
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-6">
-            <SectionTag text="Tools" />
-          </div>
-
-          {/* Tools Grid */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={{
-              visible: { transition: { staggerChildren: 0.05 } },
-            }}
-            className="flex flex-wrap gap-2 mb-4"
-          >
-            {TOOLS.map((tool) => (
-              <motion.div
-                key={tool}
-                variants={{
-                  hidden: { opacity: 0, scale: 0.8 },
-                  visible: { opacity: 1, scale: 1 },
-                }}
-              >
-                <PillTag text={tool} />
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Note */}
-          <p className="font-dancing text-xs text-muted mb-8">
-            * still learning
-          </p>
-
-          {/* Certifications Sub-section */}
-          <div className="mt-4">
-            <div className="mb-4">
-              <SectionTag text="Certs" icon={<FiAward />} />
+      {/* Marquee Row 2 (Reverse) */}
+      <div className="marquee-container">
+        <div className="marquee reverse">
+          {[...TOOL_SKILLS, ...TOOL_SKILLS, ...TOOL_SKILLS].map((skill, index) => (
+            <div key={`tool-${index}`} className="skill-pill">
+              <span className="skill-icon">{skill.icon}</span>
+              <span className="skill-name">{skill.name}</span>
             </div>
-
-            <div className="flex flex-col gap-3">
-              {CERTS.map((cert) => (
-                <div key={cert.name} className="flex items-center gap-3">
-                  {/* Square bullet */}
-                  <span
-                    className={`w-2.5 h-2.5 border-2 border-dark flex-shrink-0 ${
-                      cert.filled ? "bg-yellow" : "bg-dark"
-                    }`}
-                  />
-                  <div className="flex flex-col text-left">
-                    <span className="font-grotesk font-bold text-xs uppercase tracking-wide text-dark">
-                      {cert.name}
-                    </span>
-                    <span className="font-inter text-[11px] text-muted leading-none mt-0.5">
-                      {cert.organization}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
-    </>
+    </section>
   );
 }
