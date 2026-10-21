@@ -16,7 +16,7 @@ interface ContributionResponse {
   contributions: Activity[];
 }
 
-export default function GitHubCalendar({ username = "ig-imanish" }: { username?: string }) {
+export default function GitHubCalendar({ username = "Adarshhic" }: { username?: string }) {
   const [data, setData] = useState<ContributionResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [tooltip, setTooltip] = useState<{ x: number; y: number; content: string } | null>(null);
