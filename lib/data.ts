@@ -21,7 +21,7 @@ export const FEATURED_PROJECTS: ProjectData[] = [
     github: "https://github.com/Adarshhic/codzy",
     live: "https://github.com/Adarshhic/codzy",
     stats: "50+ Problems | Real-Time Execution",
-    hasSponsor: true,
+    hasSponsor: false,
   },
   {
     banner: "/images/projects/ui-bristohq-landingPage.webp",
@@ -31,7 +31,7 @@ export const FEATURED_PROJECTS: ProjectData[] = [
     github: "https://github.com/Adarshhic",
     live: "https://github.com/Adarshhic",
     stats: "Multi-Tenant SaaS | Gemini AI",
-    hasSponsor: true,
+    hasSponsor: false,
   },
   {
     banner: "/images/projects/BlogZone.webp",
@@ -41,37 +41,10 @@ export const FEATURED_PROJECTS: ProjectData[] = [
     github: "https://github.com/Adarshhic/second-brain",
     live: "https://github.com/Adarshhic/second-brain",
     stats: "Full-Stack Knowledge Base",
-  },
-  {
-    banner: "/images/projects/manishPortfoliov2.webp",
-    name: "Modern Portfolio",
-    desc: "High-performance developer portfolio built with Next.js 16, React 19, and Tailwind CSS. Features dynamic particle canvas effects, GitHub activity heatmap, and interactive subpages.",
-    tech: ["Next.js", "React 19", "TypeScript", "Tailwind CSS", "Canvas"],
-    github: "https://github.com/Adarshhic/Portfolio",
-    live: "/",
-    stats: "Next.js 16 + React 19",
+    hasSponsor: false,
   },
 ];
 
-export const MORE_PROJECTS: ProjectData[] = [
-  {
-    banner: "/images/projects/mxicons.webp",
-    name: "DevConnect Real-Time",
-    desc: "Developer collaboration & networking platform. Room-based live synchronization with WebSockets, instant markdown code sharing, and secure authentication.",
-    tech: ["React.js", "TypeScript", "Node.js", "Express.js", "WebSocket", "MongoDB", "Tailwind CSS"],
-    github: "https://github.com/Adarshhic",
-    live: "https://github.com/Adarshhic",
-    stats: "Real-Time Collaboration",
-  },
-  {
-    banner: "/images/projects/quickrefme-clone.webp",
-    name: "200+ DSA Algorithms Suite",
-    desc: "Comprehensive collection of competitive programming solutions, optimized data structures, and algorithms solved across LeetCode and GeeksforGeeks.",
-    tech: ["Java", "JavaScript", "Algorithms", "Data Structures", "Dynamic Programming"],
-    github: "https://github.com/Adarshhic",
-    live: "https://github.com/Adarshhic",
-    stats: "200+ Solved",
-  },
-];
+export const MORE_PROJECTS: ProjectData[] = [];
 
-export const ALL_PROJECTS: ProjectData[] = [...FEATURED_PROJECTS, ...MORE_PROJECTS];
+export const ALL_PROJECTS: ProjectData[] = [...FEATURED_PROJECTS];
